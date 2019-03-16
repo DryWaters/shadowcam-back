@@ -1,0 +1,25 @@
+{
+  "name": "jwt-demo-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "cors": "*",
+    "dotenv": "*",
+    "express": "*",
+    "jsonwebtoken": "*",
+    "nodemon": "^1.18.10",
+    "passport": "*",
+    "passport-jwt": "*",
+    "pg-promise": "^8.0.0"
+  }
+}
