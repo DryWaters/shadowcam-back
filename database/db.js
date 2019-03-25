@@ -26,18 +26,4 @@ if (process.env.LOCAL && process.env.LOCAL === 'TRUE') {
   db = pgp(process.env.DATABASE_URL + '?ssl=true');
 }
 
-/**
- * ColumnSet definitions for all Pokemon data tables.
- * Used when inserting the Pokemon data.
- * @see utils.js
- */
-const userColumns = new pgp.helpers.ColumnSet([
-  'email',
-  'password',
-], {table: 'users'});
-
-module.exports = {
-  db,
-  pgp,
-  userColumns,
-};
+module.exports = db;

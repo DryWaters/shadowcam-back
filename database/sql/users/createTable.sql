@@ -1,3 +1,3 @@
-CREATE TABLE public.users (
+CREATE TABLE users (
   email CHARACTER VARYING(100) PRIMARY KEY,
   password CHARACTER VARYING(100))

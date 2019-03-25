@@ -1,4 +1,4 @@
-const database = require('./db');
+const db = require('./db');
 const sql = require('./sql');
 
 const rebuildData = () => {
@@ -8,11 +8,11 @@ const rebuildData = () => {
 }
 
 const clearDatabase = () => {
-  return database.db.none(sql.users.dropTable)
+  return db.none(sql.users.dropTable)
 }
 
 const createTables = () => {
-  return database.db.none(sql.users.createTable)
+  return db.none(sql.users.createTable)
 }
 
 module.exports = {

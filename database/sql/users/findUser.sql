@@ -1,3 +1,3 @@
 SELECT email, password
-    FROM public.users
+    FROM users
         WHERE email = $1
