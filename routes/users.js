@@ -36,7 +36,7 @@ router.post("/register", (req, res) => {
       if (result[0]) {
         res.json({
           status: "error",
-          message: "error: username already exists"
+          message: "error: email already exists"
         });
       } else {
         bcrypt
@@ -75,7 +75,7 @@ router.post("/login", (req, res) => {
     if (!result) {
       res.json({
         status: "error",
-        message: "error: user does not exist"
+        message: "error: email does not exist"
       });
     } else {
       bcrypt
@@ -109,7 +109,19 @@ router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json({ email: req.user[0].email });
+    db.any(sql.users.getUserProfile, { email: req.body.email }).then(result => {
+      if (result[0]) {
+        res.json({
+          status: "ok",
+          message: result[0]
+        });
+      } else {
+        res.json({
+          status: "error",
+          message: "error: email does not exists"
+        });
+      }
+    });
   }
 );
 

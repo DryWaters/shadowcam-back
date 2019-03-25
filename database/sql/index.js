@@ -25,18 +25,19 @@ module.exports = {
     dropTable: sql("users/dropTable.sql"),
     createTable: sql("users/createTable.sql"),
     create: sql("users/createUser.sql"),
-    findUserByEmail: sql("users/findUserByEmail.sql")
+    findUserByEmail: sql("users/findUserByEmail.sql"),
+    getUserProfile: sql("users/getUserProfile.sql")
   },
   videos: {
     dropTable: sql("videos/dropTable.sql"),
-    createTable: sql("videos/createTable.sql"),
+    createTable: sql("videos/createTable.sql")
   },
   workouts: {
     dropTable: sql("workouts/dropTable.sql"),
-    createTable: sql("workouts/createTable.sql"),
+    createTable: sql("workouts/createTable.sql")
   },
   stats: {
     dropTable: sql("stats/dropTable.sql"),
-    createTable: sql("stats/createTable.sql"),
+    createTable: sql("stats/createTable.sql")
   }
 };
