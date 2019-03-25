@@ -73,7 +73,7 @@ router.post("/login", (req, res) => {
             // jwt.sign expects first argument as object of the keys that you want to encrypt into the token,
             // second argument is the encryption secret key you want to use, and the 3rd is a options you want
             // to set for the token:  expiresIn sets the number of seconds before the token is invalid
-            const token = jwt.sign({ email }, process.env.DB_PASS, {
+            const token = jwt.sign({ email }, process.env.KEY, {
               expiresIn: 604800
             });
 
