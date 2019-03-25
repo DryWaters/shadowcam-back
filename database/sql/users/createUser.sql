@@ -1,3 +1,3 @@
-INSERT INTO users(email, password, first_name, last_name, birth_date, gender, height, weight)
-    VALUES (${email} ${password} ${first_name} ${last_name} ${birth_date} ${gender} {$height} ${weight}) 
+INSERT INTO users(email, pswd_hash, first_name, last_name, birthdate, gender, height, weight)
+    VALUES ($[email], $[password], $[firstName], $[lastName], $[birthdate], $[gender], $[height], $[weight]) 
       RETURNING email
