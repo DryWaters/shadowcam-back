@@ -79,5 +79,13 @@ FROM
 -- Add new user
 INSERT INTO Users (email, pswd, fname, lname, gender, bdate, uheight, uweight);
 
--- 
- 
+-- Add workout
+INSERT INTO Workouts (work_id, email, rec_date, work_len, num_of_int, int_len);
+
+-- Add video
+INSERT INTO Videos (vid_id, work_id, vid_len, file_size, vid_link);
+
+-- Add stats
+INSERT INTO Stats (statid, workid, jab, pwr_r, lhook, rhook, lupper, rupper, 
+lbhook, rbhook);
+
