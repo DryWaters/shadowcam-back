@@ -69,8 +69,7 @@ router.post("/login", (req, res) => {
         // else passwords do not match, result will be false
         .then(result => {
           if (result) {
-            console.log(result);
-
+            
             // jwt.sign expects first argument as object of the keys that you want to encrypt into the token,
             // second argument is the encryption secret key you want to use, and the 3rd is a options you want
             // to set for the token:  expiresIn sets the number of seconds before the token is invalid
