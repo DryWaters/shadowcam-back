@@ -1,3 +1,3 @@
-SELECT email, pswd_hashy
+SELECT email, pswd_hash
     FROM users
         WHERE email = $1
