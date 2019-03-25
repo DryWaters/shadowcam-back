@@ -1,80 +1,80 @@
 -- Create Tables
-CREATE TABLE Videos (
-  VideoID INTEGER PRIMARY KEY,
-  WorkID INTEGER REFERENCES Workouts(WorkID) NOT NULL,
-  VideoLength INTEGER NOT NULL,
-  FileSize INTEGER NOT NULL,
-  VideoLink VARCHAR (355) UNIQUE
+CREATE TABLE videos (
+  video_id INTEGER PRIMARY KEY,
+  work_id INTEGER REFERENCES workouts(work_id) NOT NULL,
+  video_length INTEGER NOT NULL,
+  file_size INTEGER NOT NULL,
+  video_link VARCHAR (355) UNIQUE
 );
 
-CREATE TABLE Workouts (
-  WorkID INTEGER PRIMARY KEY,
-  Email VARCHAR (50) REFERENCES Users(Email),
-  RecordingDate TIMESTAMP NOT NULL,
-  WorkoutLength INTEGER NOT NULL,
-  NumOfIntervals INTEGER NOT NULL,
-  IntervalLength INTEGER NOT NULL
+CREATE TABLE workouts (
+  work_id INTEGER PRIMARY KEY,
+  email VARCHAR (50) REFERENCES users(email),
+  recording_date TIMESTAMP NOT NULL,
+  workout_length INTEGER NOT NULL,
+  num_of_intervals INTEGER NOT NULL,
+  interval_length INTEGER NOT NULL
 );
 
-CREATE TABLE Users (
-  Email VARCHAR (50) PRIMARY KEY,
-  PswdHash VARCHAR (60) NOT NULL,
-  FirstName VARCHAR (50) NOT NULL,
-  LastName VARCHAR (50) NOT NULL,
-  Gender CHAR NO NULL,
-  Birthdate DATE NOT NULL,
-  UserHeight INTEGER NOT NULL,
-  UserWeight INTEGER NOT NULL
+CREATE TABLE users (
+  email VARCHAR (50) PRIMARY KEY,
+  pswd_hash VARCHAR (60) NOT NULL,
+  first_name VARCHAR (50) NOT NULL,
+  last_name VARCHAR (50) NOT NULL,
+  gender CHAR NO NULL,
+  birthdate DATE NOT NULL,
+  height INTEGER NOT NULL,
+  weight INTEGER NOT NULL
 );
 
-CREATE TABLE Stats (
-  StatID INTEGER PRIMARY KEY,
-  WorkID INTEGER REFERENCES Workouts(WorkID),
-  Jab INTEGER NOT NULL,
-  PowerRear INTEGER NOT NULL,
-  LeftHook INTEGER NOT NULL,
-  RightHook INTEGER NOT NULL,
-  LeftUppercut INTEGER NOT NULL,
-  RightUppercut INTEGER NOT NULL,
-  LeftBodyHook INTEGER NOT NULL,
-  RightBodyHook INTEGER NOT NULL,
+CREATE TABLE stats (
+  stat_id INTEGER PRIMARY KEY,
+  work_id INTEGER REFERENCES workouts(work_id),
+  jab INTEGER NOT NULL,
+  power_rear INTEGER NOT NULL,
+  left_hook INTEGER NOT NULL,
+  right_hook INTEGER NOT NULL,
+  left_uppercut INTEGER NOT NULL,
+  right_uppercut INTEGER NOT NULL,
+  left_body_hook INTEGER NOT NULL,
+  right_body_hook INTEGER NOT NULL,
 );
 
 -- Get user account based on email
 SELECT 
-    Email, FirstName, LastName, Gender, Birthdate, Height, Weight
+    email, first_name, last_name, gender, birthdate, height, weight
 FROM
-    Users
+    users
 WHERE
-    Email = $1;
+    email = $1;
 
 -- Get hashed password
 SELECT
-    PswdHash
+    pswd_hash
 FROM
-    Users
+    users
 WHERE
-    Email = $1;
+    email = $1;
 
 -- Get all workouts on user
 SELECT
     *
 FROM
-    Workouts JOIN Users ON (Workouts.Email = Users.Email);
+    workouts JOIN users ON (workouts.email = users.email);
 
 -- Get workout based on WorkID
 SELECT
     *
 FROM
-    Workouts
+    workouts
 WHERE
-    WorkID = $1;
+    work_id = $1;
 
 -- Get statistics from specific workout
 SELECT
     *
 FROM
-    Stats JOIN Workouts AS work ON(Stats.WorkID = work.WorkID);
+    stats JOIN workouts AS work ON(stats.work_id = work.work_id);
 
 -- Add new user
 INSERT INTO Users (email, pswd, fname, lname, gender, bdate, uheight, uweight);

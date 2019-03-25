@@ -8,11 +8,17 @@ const rebuildData = () => {
 }
 
 const clearDatabase = () => {
-  return db.none(sql.users.dropTable)
+  return db.none(sql.stats.dropTable)
+  .then(() => db.none(sql.videos.dropTable))
+  .then(() => db.none(sql.workouts.dropTable))
+  .then(() => db.none(sql.users.dropTable))
 }
 
 const createTables = () => {
   return db.none(sql.users.createTable)
+  .then(() => db.none(sql.workouts.createTable))
+  .then(() => db.none(sql.videos.createTable))
+  .then(() => db.none(sql.stats.createTable))
 }
 
 module.exports = {
