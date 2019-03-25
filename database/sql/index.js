@@ -3,8 +3,8 @@
  * external SQL files and exports them as objects
  */
 
-const QueryFile = require('pg-promise').QueryFile;
-const path = require('path');
+const QueryFile = require("pg-promise").QueryFile;
+const path = require("path");
 
 /**
  * Helper function to create a QueryFile object from a given
@@ -14,16 +14,17 @@ const path = require('path');
  * @param {String} file The filename that contains the sql
  * @return {Object} QueryFile that PGPromise uses to run queries
  */
-const sql = (file) => {
+const sql = file => {
   const fullPath = path.join(__dirname, file);
-  return new QueryFile(fullPath, {minify: true});
+  return new QueryFile(fullPath, { minify: true });
 };
 
+// Just add the SQL you want to use here.
 module.exports = {
   users: {
-    dropTable: sql('users/dropTable.sql'),
-    createTable: sql('users/createTable.sql'),
-    create: sql('users/createUser.sql'),
-    findUser: sql('users/findUser.sql')
-  },
+    dropTable: sql("users/dropTable.sql"),
+    createTable: sql("users/createTable.sql"),
+    create: sql("users/createUser.sql"),
+    findUser: sql("users/findUser.sql")
+  }
 };
