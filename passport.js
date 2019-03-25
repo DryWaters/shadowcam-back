@@ -6,7 +6,7 @@ const sql = require("./database/sql");
 module.exports = passport => {
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-  opts.secretOrKey = process.env.DB_PASS;
+  opts.secretOrKey = process.env.KEY;
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
       return database.db

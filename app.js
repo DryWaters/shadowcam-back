@@ -10,8 +10,6 @@ const utils = require('./database/utils');
 const app = express();
 const users = require("./routes/users");
 
-const port = 3000;
-
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
@@ -28,6 +26,6 @@ if (process.env.REBUILD_DATA && process.env.REBUILD_DATA === "TRUE") {
   });
 }
 
-app.listen(port, () => {
-  console.log("Server started at port " + port);
+app.listen(process.env.PORT, () => {
+  console.log("Server started at port " + process.env.PORT);
 });
