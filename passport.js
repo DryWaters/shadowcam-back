@@ -1,6 +1,6 @@
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const database = require("./database/db");
+const db = require("./database/db");
 const sql = require("./database/sql");
 
 module.exports = passport => {
@@ -9,11 +9,11 @@ module.exports = passport => {
   opts.secretOrKey = process.env.KEY;
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      return database.db
-        .any(sql.users.findUser, [jwt_payload.email])
+      return db
+        .any(sql.users.findUserByEmail, { email: jwt_payload.email })
         .then(result => {
-          if (result) {
-            return done(null, result);
+          if (result[0]) {
+            return done(null, result[0]);
           } else {
             return done(null, false);
           }
