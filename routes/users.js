@@ -31,7 +31,7 @@ router.post("/register", (req, res) => {
     }
   }
 
-  db.any(sql.users.findUserByEmail, [user.email])
+  db.any(sql.users.findUserByEmail, { email: user.email })
     .then(result => {
       if (result[0]) {
         res.json({
@@ -71,15 +71,15 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  db.any(sql.users.findUserByEmail, [email]).then(result => {
-    if (!result[0]) {
+  db.one(sql.users.findUserByEmail, { email }).then(result => {
+    if (!result) {
       res.json({
         status: "error",
         message: "error: user does not exist"
       });
     } else {
       bcrypt
-        .compare(password, result[0].password)
+        .compare(password, result.pswd_hash)
         .then(result => {
           if (result) {
             const token = jwt.sign({ email }, process.env.KEY, {
@@ -100,17 +100,11 @@ router.post("/login", (req, res) => {
             });
           }
         })
-        // Error in checking token or DB calls.
         .catch(err => console.log(err));
     }
   });
 });
 
-// Example on how to secure a route.
-// Add second parameter to .get() that sets the passport authentication middlewhere
-// We are using JWT tokens and not session so set { session: false }
-// Everything else is the same.  If a user tries to go to a secured route without
-// a valid token then it will come back Invalid
 router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
