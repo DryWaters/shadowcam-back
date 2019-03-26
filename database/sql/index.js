@@ -19,7 +19,6 @@ const sql = file => {
   return new QueryFile(fullPath, { minify: true });
 };
 
-// Just add the SQL you want to use here.
 module.exports = {
   users: {
     dropTable: sql("users/dropTable.sql"),

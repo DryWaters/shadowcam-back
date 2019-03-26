@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { db } = require("../database/db");
-const sql = require("../database/sql");
+const sql = require("../database/sql").users;
 const bcrypt = require("bcryptjs");
 
 router.post("/register", (req, res) => {
@@ -30,7 +30,7 @@ router.post("/register", (req, res) => {
     }
   }
 
-  db.any(sql.users.findUserByEmail, { email: user.email })
+  db.any(sql.findUserByEmail, { email: user.email })
     .then(result => {
       if (result[0]) {
         res.json({
@@ -47,7 +47,7 @@ router.post("/register", (req, res) => {
             user.password = hash;
           })
           .then(() => {
-            return db.any(sql.users.create, user);
+            return db.any(sql.create, user);
           })
           .then(result => {
             res.json({
@@ -70,7 +70,7 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  db.any(sql.users.findUserByEmail, { email }).then(result => {
+  db.any(sql.findUserByEmail, { email }).then(result => {
     if (!result[0]) {
       res.json({
         status: "error",
@@ -108,7 +108,7 @@ router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    db.any(sql.users.getUserProfile, { email: req.body.email }).then(result => {
+    db.any(sql.getUserProfile, { email: req.body.email }).then(result => {
       if (result[0]) {
         res.json({
           status: "ok",

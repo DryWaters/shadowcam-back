@@ -1,7 +1,7 @@
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const db = require("./database/db");
-const sql = require("./database/sql");
+const { db } = require("./database/db");
+const sql = require("./database/sql").users;
 
 module.exports = passport => {
   var opts = {};
@@ -10,7 +10,7 @@ module.exports = passport => {
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
       return db
-        .any(sql.users.findUserByEmail, { email: jwt_payload.email })
+        .any(sql.findUserByEmail, { email: jwt_payload.email })
         .then(result => {
           if (result[0]) {
             return done(null, result[0]);
