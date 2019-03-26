@@ -6,11 +6,10 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const passport = require("passport");
 const utils = require('./database/utils');
+const { pgp } = require('./database/db');
 
 const app = express();
 const users = require("./routes/users");
-
-const port = 3000;
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
@@ -28,6 +27,15 @@ if (process.env.REBUILD_DATA && process.env.REBUILD_DATA === "TRUE") {
   });
 }
 
-app.listen(port, () => {
-  console.log("Server started at port " + port);
-});
+// close database connections on exit
+const closeDBConnections = () => {
+  if (pgp) {
+    pgp.end();
+  }
+  process.exit(1);
+};
+
+process.on('SIGINT', closeDBConnections);
+process.on('SIGTERM', closeDBConnections);
+
+module.exports = app;

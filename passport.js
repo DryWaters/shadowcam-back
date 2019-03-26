@@ -1,19 +1,19 @@
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const database = require("./database/db");
-const sql = require("./database/sql");
+const { db } = require("./database/db");
+const sql = require("./database/sql").users;
 
 module.exports = passport => {
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-  opts.secretOrKey = process.env.DB_PASS;
+  opts.secretOrKey = process.env.KEY;
   passport.use(
     new JwtStrategy(opts, (jwt_payload, done) => {
-      return database.db
-        .any(sql.users.findUser, [jwt_payload.email])
+      return db
+        .any(sql.findUserByEmail, { email: jwt_payload.email })
         .then(result => {
-          if (result) {
-            return done(null, result);
+          if (result[0]) {
+            return done(null, result[0]);
           } else {
             return done(null, false);
           }

@@ -16,15 +16,27 @@ const path = require("path");
  */
 const sql = file => {
   const fullPath = path.join(__dirname, file);
-  return new QueryFile(fullPath, { minify: true });
+  return new QueryFile(fullPath, { minify: true, noWarnings: true });
 };
 
-// Just add the SQL you want to use here.
 module.exports = {
   users: {
     dropTable: sql("users/dropTable.sql"),
     createTable: sql("users/createTable.sql"),
     create: sql("users/createUser.sql"),
-    findUser: sql("users/findUser.sql")
+    findUserByEmail: sql("users/findUserByEmail.sql"),
+    getUserProfile: sql("users/getUserProfile.sql")
+  },
+  videos: {
+    dropTable: sql("videos/dropTable.sql"),
+    createTable: sql("videos/createTable.sql")
+  },
+  workouts: {
+    dropTable: sql("workouts/dropTable.sql"),
+    createTable: sql("workouts/createTable.sql")
+  },
+  stats: {
+    dropTable: sql("stats/dropTable.sql"),
+    createTable: sql("stats/createTable.sql")
   }
 };
