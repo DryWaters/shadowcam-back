@@ -27,10 +27,6 @@ if (process.env.REBUILD_DATA && process.env.REBUILD_DATA === "TRUE") {
   });
 }
 
-app.listen(process.env.PORT, () => {
-  console.log("Server started at port " + process.env.PORT);
-});
-
 // close database connections on exit
 const closeDBConnections = () => {
   if (pgp) {
