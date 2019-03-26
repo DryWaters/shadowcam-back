@@ -16,7 +16,7 @@ const path = require("path");
  */
 const sql = file => {
   const fullPath = path.join(__dirname, file);
-  return new QueryFile(fullPath, { minify: true });
+  return new QueryFile(fullPath, { minify: true, noWarnings: true });
 };
 
 module.exports = {
