@@ -7,7 +7,7 @@ const sql = require("../database/sql");
 const bcrypt = require("bcryptjs");
 
 router.post("/register", (req, res) => {
-  const requiredFields = new Set(
+  const requiredFields = new Set([
     "email",
     "password",
     "firstName",
@@ -16,12 +16,11 @@ router.post("/register", (req, res) => {
     "birthdate",
     "height",
     "weight"
-  );
+  ]);
   const user = Object.assign({}, req.body);
 
-  for (let field in requiredFields) {
+  for (let field of requiredFields) {
     if (!user.hasOwnProperty(field)) {
-      console.log("missing", field);
       return res
         .json({
           status: "error",
@@ -71,15 +70,15 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  db.one(sql.users.findUserByEmail, { email }).then(result => {
-    if (!result) {
+  db.any(sql.users.findUserByEmail, { email }).then(result => {
+    if (!result[0]) {
       res.json({
         status: "error",
         message: "error: email does not exist"
       });
     } else {
       bcrypt
-        .compare(password, result.pswd_hash)
+        .compare(password, result[0].pswd_hash)
         .then(result => {
           if (result) {
             const token = jwt.sign({ email }, process.env.KEY, {
