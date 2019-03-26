@@ -23,8 +23,8 @@ CREATE TABLE users (
   last_name VARCHAR (50) NOT NULL,
   gender CHAR NO NULL,
   birthdate DATE NOT NULL,
-  height INTEGER NOT NULL,
-  weight INTEGER NOT NULL
+  user_height INTEGER NOT NULL,
+  user_weight INTEGER NOT NULL
 );
 
 CREATE TABLE stats (
@@ -42,7 +42,7 @@ CREATE TABLE stats (
 
 -- Get user account based on email
 SELECT 
-    email, first_name, last_name, gender, birthdate, height, weight
+    email, first_name, last_name, gender, birthdate, user_height, user_weight
 FROM
     users
 WHERE
@@ -77,20 +77,20 @@ FROM
     stats JOIN workouts AS work ON(stats.work_id = work.work_id);
 
 -- Add new user
-INSERT INTO Users (email, pswd, fname, lname, gender, bdate, uheight, uweight);
+INSERT INTO users (email, pswd, fname, lname, gender, bdate, uheight, uweight);
 
 -- Add workout
-INSERT INTO Workouts (work_id, email, rec_date, work_len, num_of_int, int_len);
+INSERT INTO workouts (work_id, email, rec_date, work_len, num_of_int, int_len);
 
 -- Add video
-INSERT INTO Videos (vid_id, work_id, vid_len, file_size, vid_link);
+INSERT INTO videos (vid_id, work_id, vid_len, file_size, vid_link);
 
 -- Add stats
-INSERT INTO Stats (statid, workid, jab, pwr_r, lhook, rhook, lupper, rupper, 
+INSERT INTO stats (statid, workid, jab, pwr_r, lhook, rhook, lupper, rupper, 
 lbhook, rbhook);
 
 -- Update user, not email
-UPDATE Users
+UPDATE users
 SET pswd_hash = pswd,
     first_name = fname,
     last_name = lname,
