@@ -62,7 +62,7 @@ SELECT
 FROM
     Workouts JOIN Users ON (Workouts.Email = Users.Email);
 
--- Get workout based on WorkID
+-- Get single workout based on WorkID
 SELECT
     *
 FROM
@@ -88,4 +88,19 @@ INSERT INTO Videos (vid_id, work_id, vid_len, file_size, vid_link);
 -- Add stats
 INSERT INTO Stats (statid, workid, jab, pwr_r, lhook, rhook, lupper, rupper, 
 lbhook, rbhook);
+
+-- Update user, not email
+UPDATE Users
+SET pswd_hash = pswd,
+    first_name = fname,
+    last_name = lname,
+    gender = g,
+    birthdate = bdate,
+    user_height = uheight,
+    user_weight = uweight;
+
+-- Get videos based off workID
+
+-- Get stats based off workiD
+
 
