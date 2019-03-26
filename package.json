@@ -1,6 +1,6 @@
 {
-  "name": "jwt-demo-app",
-  "version": "1.0.0",
+  "name": "shadowcam-back",
+  "version": "0.5.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,17 +9,20 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "bcryptjs": "*",
-    "body-parser": "*",
-    "cors": "*",
-    "dotenv": "*",
-    "express": "*",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
     "jsonwebtoken": "*",
     "nodemon": "^1.18.10",
-    "passport": "*",
-    "passport-jwt": "*",
-    "pg-promise": "^8.0.0"
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "pg-promise": "^8.6.4"
+  },
+  "devDependencies": {
+    "supertest": "^4.0.2"
   }
 }
