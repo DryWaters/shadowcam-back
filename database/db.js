@@ -16,7 +16,9 @@ if (process.env.LOCAL && process.env.LOCAL === "TRUE") {
     password: process.env.DB_PASS
   };
   db = pgp(connectionDetails);
+  console.log("making local DB");
 } else {
+  console.log("making connection to remote db");
   db = pgp(process.env.DATABASE_URL + "?ssl=true");
 }
 

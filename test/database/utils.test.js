@@ -60,8 +60,6 @@ QUnit.test("Checks that clears tables", assert => {
       console.log(error);
       assert.ok(false, "Unable to clear tables");
     });
-
-  assert.ok(1 == 1);
 });
 
 QUnit.test("Checks that tables are created", assert => {

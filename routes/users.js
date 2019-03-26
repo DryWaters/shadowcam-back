@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { db } = require("../database/db");
 const sql = require("../database/sql").users;
 const bcrypt = require("bcryptjs");
+const moment = require('moment');
 
 router.post("/register", (req, res) => {
   const requiredFields = new Set([
@@ -84,13 +85,15 @@ router.post("/login", (req, res) => {
             const token = jwt.sign({ email }, process.env.KEY, {
               expiresIn: 604800
             });
-            let expireDate = Date.now();
-            expireDate += 604800 * 1000;
-            expireDate = new Date(expireDate);
+            let expireDate = moment();
+            expireDate.add(604800, 's');
             res.json({
-              email,
-              token,
-              expiresIn: expireDate.toLocaleString()
+              status: "ok",
+              message: {
+                email,
+                token,
+                expiresIn: expireDate.format()
+              }
             });
           } else {
             return res.json({
@@ -108,7 +111,7 @@ router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    db.any(sql.getUserProfile, { email: req.body.email }).then(result => {
+    db.any(sql.getUserProfile, { email: req.user.email }).then(result => {
       if (result[0]) {
         res.json({
           status: "ok",
