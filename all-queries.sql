@@ -1,4 +1,4 @@
--- Create Tables
+-- [x] Create videos table 
 CREATE TABLE videos (
   video_id INTEGER PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id) NOT NULL,
@@ -7,6 +7,7 @@ CREATE TABLE videos (
   video_link VARCHAR (355) UNIQUE
 );
 
+-- [x] Create workouts table
 CREATE TABLE workouts (
   work_id INTEGER PRIMARY KEY,
   email VARCHAR (50) REFERENCES users(email),
@@ -16,6 +17,7 @@ CREATE TABLE workouts (
   interval_length INTEGER NOT NULL
 );
 
+-- [x] create users table
 CREATE TABLE users (
   email VARCHAR (50) PRIMARY KEY,
   pswd_hash VARCHAR (60) NOT NULL,
@@ -23,10 +25,11 @@ CREATE TABLE users (
   last_name VARCHAR (50) NOT NULL,
   gender CHAR NO NULL,
   birthdate DATE NOT NULL,
-  height INTEGER NOT NULL,
-  weight INTEGER NOT NULL
+  user_height INTEGER NOT NULL,
+  user_weight INTEGER NOT NULL
 );
 
+-- [x] create stats table
 CREATE TABLE stats (
   stat_id INTEGER PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id),
@@ -40,35 +43,35 @@ CREATE TABLE stats (
   right_body_hook INTEGER NOT NULL,
 );
 
--- Get user account based on email
+-- [x] Get user account based on email
 SELECT 
-    email, first_name, last_name, gender, birthdate, height, weight
+    email, first_name, last_name, gender, birthdate, user_height, user_weight
 FROM
     users
 WHERE
-    email = $1;
+    email = $[email];
 
--- Get hashed password
+-- [] Get hashed password
 SELECT
     pswd_hash
 FROM
     users
 WHERE
-    email = $1;
+    email = $[email];
 
--- Get all workouts on user
+-- [] Get all workouts on user
 SELECT
     *
 FROM
     workouts JOIN users ON (workouts.email = users.email);
 
--- Get workout based on WorkID
+-- [] Get single workout based on WorkID
 SELECT
     *
 FROM
     workouts
 WHERE
-    work_id = $1;
+    work_id = $[w_id];
 
 -- Get statistics from specific workout
 SELECT
@@ -76,16 +79,36 @@ SELECT
 FROM
     stats JOIN workouts AS work ON(stats.work_id = work.work_id);
 
--- Add new user
-INSERT INTO Users (email, pswd, fname, lname, gender, bdate, uheight, uweight);
+-- [x] Add new user
+INSERT INTO users ($[email], $[pswd], $[fname], $[lname], $[gender], $[bdate], 
+$[uheight], $[uweight]);
 
--- Add workout
-INSERT INTO Workouts (work_id, email, rec_date, work_len, num_of_int, int_len);
+-- [] Add workout
+INSERT INTO workouts ($[work_id], $[email], $[rec_date], $[work_len], 
+$[num_of_int], $[int_len]);
 
--- Add video
-INSERT INTO Videos (vid_id, work_id, vid_len, file_size, vid_link);
+-- [] Add video
+INSERT INTO videos ($[vid_id], $[work_id], $[vid_len], $[file_size], 
+$[vid_link]);
 
--- Add stats
-INSERT INTO Stats (statid, workid, jab, pwr_r, lhook, rhook, lupper, rupper, 
-lbhook, rbhook);
+-- [] Add stats
+INSERT INTO stats ($[statid], $[workid], $[jab], $[pwr_r], $[lhook], $[rhook], 
+$[lupper], $[rupper], $[lbhook], $[rbhook]);
+
+-- [x] Update user, not email
+UPDATE users
+SET pswd_hash = $[pswd],
+    first_name = $[fname],
+    last_name = $[lname],
+    gender = $[gender],
+    birthdate = $[bdate],
+    user_height = $[uheight],
+    user_weight = $[uweight]
+WHERE
+    email = $[email];
+
+-- [] Get videos based off workID
+
+-- [] Get stats based off workiD
+
 

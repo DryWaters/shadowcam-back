@@ -25,7 +25,9 @@ module.exports = {
     createTable: sql("users/createTable.sql"),
     create: sql("users/createUser.sql"),
     findUserByEmail: sql("users/findUserByEmail.sql"),
-    getUserProfile: sql("users/getUserProfile.sql")
+    getUserProfile: sql("users/getUserProfile.sql"),
+    updateUserByEmail: sql("users/updateUserByEmail.sql"),
+    addUser: sql("users/addUser.sql")
   },
   videos: {
     dropTable: sql("videos/dropTable.sql"),
