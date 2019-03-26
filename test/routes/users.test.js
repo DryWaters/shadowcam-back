@@ -11,7 +11,7 @@ const validUserData = {
   firstName: "tester",
   lastName: "test",
   gender: "m",
-  birthdate: "2019-1-1",
+  birthdate: moment("2001-10-20").toISOString(),
   height: 60,
   weight: 160
 };
@@ -167,32 +167,69 @@ QUnit.test(
 );
 
 QUnit.test(
-  "Should return back correct user details if have token for user ",
+  "Should return back correct user details if have token for user",
   assert => {
+    const userDetails = {
+      email: "test@test.com",
+      first_name: "tester",
+      last_name: "test",
+      gender: "m",
+      birthdate: moment("2001-10-20").toISOString(),
+      height: 60,
+      weight: 160
+    };
+
     const assertAsync = assert.async();
-    let token;
     request(app)
-      .get("/users/login")
+      .post("/users/login")
       .send({
         email: validUserData.email,
         password: validUserData.password
       })
       .then(res => {
-        token = res.body.message.token
         return request(app)
-          .get("users/profile")
-          .set("Authorization", `Bearer ${token}`)
-          .then(res => console.log(res))
+          .get("/users/profile")
+          .set("Authorization", `Bearer ${res.body.message.token}`)
           .catch(err => {
-            assertAsync();
             assert.ok(false, `FAIL /users/login, with error ${err}`);
           });
       })
-      .then(res => console.log(res))
-
+      .then(res => {
+        assertAsync();
+        assert.deepEqual(res.body.message, userDetails);
+      })
       .catch(err => {
         assertAsync();
         assert.ok(false, `FAIL /users/login, with error ${err}`);
       });
   }
 );
+
+QUnit.test("Should return back unauthorized if missing token", assert => {
+  const assertAsync = assert.async();
+  request(app)
+    .get("/users/profile")
+    .then(res => {
+      assertAsync();
+      assert.equal(res.status, 401);
+    })
+    .catch(err => {
+      assertAsync();
+      assert.ok(false, `FAIL /users/login, with error ${err}`);
+    });
+});
+
+QUnit.test("Should return back unauthorized if token is wrong", assert => {
+  const assertAsync = assert.async();
+  request(app)
+    .get("/users/profile")
+    .set("Authorization", `Bearer somebadtoken`)
+    .then(res => {
+      assertAsync();
+      assert.equal(res.status, 401);
+    })
+    .catch(err => {
+      assertAsync();
+      assert.ok(false, `FAIL /users/login, with error ${err}`);
+    });
+});
