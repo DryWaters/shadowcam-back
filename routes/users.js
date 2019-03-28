@@ -48,7 +48,7 @@ router.post("/register", (req, res) => {
             user.password = hash;
           })
           .then(() => {
-            return db.any(sql.create, user);
+            return db.any(sql.createUser, user);
           })
           .then(result => {
             res.json({
