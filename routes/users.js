@@ -10,8 +10,8 @@ const multer = require('multer');
 
 // Set storage engine
 const storage = multer.diskStorage({
-  destination: '../public/videos',
-  filename: function(req, res, cb){
+  destination: './public/videos/',
+  filename: function(req, file, cb){
     cb(null, file.fieldname + '-' + Date.now() + '.webm');
   }
 });
@@ -34,8 +34,7 @@ router.post('/upload', (req, res) =>
       })
     } else {
       console.log(req.file);
-      // Take file information and store it in database, or get information from front-end json
-      // { fieldname: username, filename: filename, size: size}
+      // Take file information and store it in database, and get username from front-end json
       res.json({ 
         status: "ok",
         message: "Video upload successful"
