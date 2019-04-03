@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const passport = require("passport");
 const utils = require('./database/utils');
-const { pgp } = require('./database/db');
+const { pgp } = require('./database/db'); 
 
 const app = express();
 const users = require("./routes/users");
