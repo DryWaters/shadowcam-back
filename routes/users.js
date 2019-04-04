@@ -6,42 +6,6 @@ const { db } = require("../database/db");
 const sql = require("../database/sql").users;
 const bcrypt = require("bcryptjs");
 const moment = require('moment');
-const multer = require('multer');
-
-// Set storage engine
-const storage = multer.diskStorage({
-  destination: './public/videos/',
-  filename: function(req, file, cb){
-    cb(null, file.fieldname + '-' + Date.now() + '.webm');
-  }
-});
-
-// Init upload
-const upload = multer({
-  storage: storage
-}).single('myVideo'); 
-// We will replace 'myVideo' with whatever you set as fieldname.
-// You also need to add enctype='multipart/form-data to the form you are sending the file.
-
-// Upload video
-router.post('/upload', (req, res) =>
-{
-  upload(req, res, (err) => {
-    if(err){
-      res.json({
-        status: "error",
-        message: "Error: " + err.toString()
-      })
-    } else {
-      console.log(req.file);
-      // Take file information and store it in database, and get username from front-end json
-      res.json({ 
-        status: "ok",
-        message: "Video upload successful"
-      })
-    }
-  })
-})
 
 router.post("/register", (req, res) => {
   const requiredFields = new Set([
