@@ -1,5 +1,5 @@
 CREATE TABLE workouts (
-  work_id INTEGER PRIMARY KEY,
+  work_id SERIAL PRIMARY KEY,
   email VARCHAR (50) REFERENCES users(email),
   recording_date TIMESTAMP NOT NULL,
   workout_length INTEGER NOT NULL,

@@ -21,6 +21,54 @@ const multer = require('multer');
 //     }
 // });
 
+// router.post('/workouts', passport.authenticate("jwt", { session: false }), 
+// (req, res) => {
+
+// })
+
+router.post('/workouts', passport.authenticate("jwt", { session: false }), 
+(req, res) => {
+    const requiredFields = new Set([
+        "email",
+        "work_len",
+        "num_of_int",
+        "int_len"
+    ]);
+
+    const workout = Object.assign({}, req.body);
+
+    for (let field of requiredFields) {
+        if (!workout.hasOwnProperty(field)) {
+          return res
+            .json({
+              status: "error",
+              message: "error: missing user data"
+            })
+            .end();
+        }
+    }
+
+    db.any(sql.createWorkout, { workout })
+    .then(result => {
+        if(result[0]){
+            res.json({ 
+                status: "ok",
+                message: "work_id: " + result[0]
+            })
+        } else {
+            res.json({ 
+                status: "error",
+                message: "Insertion failed"
+            })
+        }
+    })
+})
+
+// email: req.user.email,
+//         work_len: workout.work_len,
+//         num_of_int: workout.num_of_int,
+//         int_len: workout.int_len
+
 router.post('/upload', passport.authenticate("jwt", { session: false }), 
 (req, res) => {
     const email = req.user.email

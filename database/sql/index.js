@@ -34,7 +34,8 @@ module.exports = {
   },
   workouts: {
     dropTable: sql("workouts/dropTable.sql"),
-    createTable: sql("workouts/createTable.sql")
+    createTable: sql("workouts/createTable.sql"),
+    createWorkout: sql("workouts/createWorkout.sql") 
   },
   stats: {
     dropTable: sql("stats/dropTable.sql"),
