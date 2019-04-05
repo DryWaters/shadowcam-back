@@ -8,7 +8,12 @@ const multer = require("multer");
 router.post(
   "/upload",
   passport.authenticate("jwt", { session: false }),
-  (req, res) => {
+   (req, res) => {
+
+    // save filename in outerscope so can return later in JSON
+    // response
+    let filename;
+
     const storage = multer.diskStorage({
       destination: "./public/videos/",
       filename: function(req, file, cb) {
@@ -23,9 +28,10 @@ router.post(
         insertVideoInfo(videoInfo, res)
           .then(result => {
             if (result[0]) {
+              filename = `${result[0].video_id}.webm`
               // if able to insert into video table
               // name the file the video_id
-              cb(null, `${result[0].video_id}.webm`);
+              cb(null, filename);
             } else {
               // else error, respond back
               res.json({
@@ -61,7 +67,7 @@ router.post(
 
         res.json({
           status: "ok",
-          message: "Video upload successful"
+          message: `Video upload successful: ${filename}`
         });
       }
     });
@@ -117,6 +123,8 @@ router.post(
 
 const insertVideoInfo = (videoInfo, res) => {
   const requiredFields = new Set(["work_id", "file_size"]);
+
+  console.log(videoInfo);
 
   for (let field of requiredFields) {
     if (!videoInfo.hasOwnProperty(field)) {
