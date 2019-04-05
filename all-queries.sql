@@ -1,17 +1,16 @@
 -- [x] Create videos table 
 CREATE TABLE videos (
-  video_id INTEGER PRIMARY KEY,
+  video_id SERIAL PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id) NOT NULL,
-  video_length INTEGER NOT NULL,
   file_size INTEGER NOT NULL,
-  video_link VARCHAR (355) UNIQUE
+  video_length_in_sec INTEGER NOT NULL,
 );
 
 -- [x] Create workouts table
 CREATE TABLE workouts (
-  work_id INTEGER PRIMARY KEY,
+  work_id SERIAL PRIMARY KEY,
   email VARCHAR (50) REFERENCES users(email),
-  recording_date TIMESTAMP NOT NULL,
+  recording_date DATE NOT NULL,
   workout_length INTEGER NOT NULL,
   num_of_intervals INTEGER NOT NULL,
   interval_length INTEGER NOT NULL
@@ -31,7 +30,7 @@ CREATE TABLE users (
 
 -- [x] create stats table
 CREATE TABLE stats (
-  stat_id INTEGER PRIMARY KEY,
+  stat_id SERIAL PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id),
   jab INTEGER NOT NULL,
   power_rear INTEGER NOT NULL,
@@ -84,12 +83,18 @@ INSERT INTO users ($[email], $[pswd], $[fname], $[lname], $[gender], $[bdate],
 $[uheight], $[uweight]);
 
 -- [] Add workout
-INSERT INTO workouts ($[work_id], $[email], $[rec_date], $[work_len], 
-$[num_of_int], $[int_len]);
+INSERT INTO workouts(email, recording_date, workout_length, num_of_intervals, interval_length)
+VALUES($[email], $[rec_date], $[work_len], $[num_of_int], $[int_len]);
 
 -- [] Add video
-INSERT INTO videos ($[vid_id], $[work_id], $[vid_len], $[file_size], 
-$[vid_link]);
+INSERT INTO videos (work_id, file_size, video_length)
+VALUES ($[work_id], $[file_size], $[video_length])
+
+-- [] Get latest video_id by email
+SELECT video_id
+FROM videos
+WHERE email = $[email]
+ORDER BY video_id DESC
 
 -- [] Add stats
 INSERT INTO stats ($[statid], $[workid], $[jab], $[pwr_r], $[lhook], $[rhook], 
@@ -108,7 +113,17 @@ WHERE
     email = $[email];
 
 -- [] Get videos based off workID
+SELECT video_id
+FROM videos
+WHERE work_id = $[work_id]
 
 -- [] Get stats based off workiD
+SELECT stat_id
+FROM stats
+WHERE work_id = $[work_id]
 
-
+-- [] Get latest workout id by username
+SELECT work_id
+FROM workouts
+WHERE email = $[email]
+ORDER BY work_id DESC

@@ -10,6 +10,8 @@ const { pgp } = require('./database/db');
 
 const app = express();
 const users = require("./routes/users");
+const videos = require("./routes/videos")
+const workouts = require("./routes/workout")
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
@@ -20,6 +22,8 @@ require("./passport")(passport);
 
 // Put which routes you want to use here.
 app.use("/users", users);
+app.use('/videos', videos)
+app.use('/workouts', workouts)
 
 if (process.env.REBUILD_DATA && process.env.REBUILD_DATA === "TRUE") {
   utils.rebuildData().then(() => {

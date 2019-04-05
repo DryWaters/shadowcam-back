@@ -1,7 +1,6 @@
 CREATE TABLE videos (
-  video_id INTEGER PRIMARY KEY,
+  video_id SERIAL PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id) NOT NULL,
-  video_length INTEGER NOT NULL,
   file_size INTEGER NOT NULL,
-  video_link VARCHAR (355) UNIQUE
+  video_length INTEGER NOT NULL
 );

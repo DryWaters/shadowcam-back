@@ -7,38 +7,18 @@ const sql = require("../database/sql");
 const bcrypt = require("bcryptjs");
 const multer = require('multer');
 
-// db.any(sql.getUserProfile, { email: req.user.email }).then(result => {
-//     if (result[0]) {
-//         res.json({
-//             status: "ok",
-//             message: result[0]
-//         });
-//     } else {
-//         res.json({
-//             status: "error",
-//             message: "error: email does not exists"
-//         });
-//     }
-// });
-
-// router.post('/workouts', passport.authenticate("jwt", { session: false }), 
-// (req, res) => {
-
-// })
-
-router.post('/workouts', passport.authenticate("jwt", { session: false }), 
+router.post('/add', passport.authenticate("jwt", { session: false }), 
 (req, res) => {
     const requiredFields = new Set([
-        "email",
-        "work_len",
-        "num_of_int",
-        "int_len"
+        "work_id",
+        "video_length",
+        "file_size",
     ]);
-
-    const workout = Object.assign({}, req.body);
-
+    
+    const video = Object.assign({}, req.body);
+    
     for (let field of requiredFields) {
-        if (!workout.hasOwnProperty(field)) {
+        if (!video.hasOwnProperty(field)) {
           return res
             .json({
               status: "error",
@@ -47,14 +27,12 @@ router.post('/workouts', passport.authenticate("jwt", { session: false }),
             .end();
         }
     }
-
-    db.any(sql.createWorkout, { workout })
+    
+    db.any(sql.videos.addVideo, video)
     .then(result => {
         if(result[0]){
-            res.json({ 
-                status: "ok",
-                message: "work_id: " + result[0]
-            })
+            // returns video_id
+            res.json(result[0])
         } else {
             res.json({ 
                 status: "error",
@@ -64,42 +42,52 @@ router.post('/workouts', passport.authenticate("jwt", { session: false }),
     })
 })
 
-// email: req.user.email,
-//         work_len: workout.work_len,
-//         num_of_int: workout.num_of_int,
-//         int_len: workout.int_len
-
 router.post('/upload', passport.authenticate("jwt", { session: false }), 
 (req, res) => {
-    const email = req.user.email
-    
-    // Set storage engine
-    const storage = multer.diskStorage({
-      destination: './public/videos/',
-      filename: function(req, file, cb){
-        cb(null, email + '-' + Date.now() + '.webm');
-      }
-    });
-    
-    // Init upload
-    const upload = multer({
-      storage: storage
-    }).single('myVideo'); 
-    // Set fieldname='myVideo' and enctype='multipart/form-data' in the form
-    
-    upload(req, res, (err) => {
-        if(err){
-            res.json({
-                status: "error",
-                message: err.toString()
+
+    let video_id;
+
+    // get the id of the newest video on email from the token
+    db.any(sql.videos.getLatestVideoID)
+    .then(result => {
+        if(result[0]){
+            // returns video_id
+            video_id = result[0].video_id
+
+            const storage = multer.diskStorage({
+              destination: './public/videos/',
+              filename: function(req, file, cb){
+                //   set the video name to be vid_id
+                cb(null, JSON.stringify(video_id) + '.webm');
+              }
+            });
+            
+            // Init upload
+            const upload = multer({
+              storage: storage
+            }).single('myVideo'); 
+            // Set fieldname='myVideo' and enctype='multipart/form-data' in the form
+            
+            upload(req, res, (err) => {
+                if(err){
+                    res.json({
+                        status: "error",
+                        message: err.toString()
+                    })
+                } else {
+                    // Get file information from req.file and username from token, and 
+                    // store it in database - in progress
+                    console.log(req.file);
+                    res.json({ 
+                        status: "ok",
+                        message: "Video upload successful"
+                    })
+                }
             })
         } else {
-            // Get file information from req.file and username from token, and 
-            // store it in database - in progress
-            console.log(req.file);
             res.json({ 
-                status: "ok",
-                message: "Video upload successful"
+                status: "error",
+                message: "Insertion failed"
             })
         }
     })

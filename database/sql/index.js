@@ -30,12 +30,15 @@ module.exports = {
   },
   videos: {
     dropTable: sql("videos/dropTable.sql"),
-    createTable: sql("videos/createTable.sql")
+    createTable: sql("videos/createTable.sql"),
+    addVideo: sql("videos/addVideo.sql"),
+    getLatestVideoID: sql("videos/getLatestVideoID.sql")
   },
   workouts: {
     dropTable: sql("workouts/dropTable.sql"),
     createTable: sql("workouts/createTable.sql"),
-    createWorkout: sql("workouts/createWorkout.sql") 
+    createWorkout: sql("workouts/createWorkout.sql"),
+    getLatestWorkout: sql("workouts/getLatestWorkout.sql")
   },
   stats: {
     dropTable: sql("stats/dropTable.sql"),
