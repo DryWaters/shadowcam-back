@@ -30,7 +30,9 @@ router.post(
       if (result[0]) {
         res.json({
           status: "ok",
-          message: `work_id: ${result[0].work_id}`
+          message: {
+            work_id: result[0].work_id
+          }
         });
       } else {
         res.json({
