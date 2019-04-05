@@ -1,11 +1,8 @@
 const express = require("express");
 const router = (module.exports = express.Router());
 const passport = require("passport");
-const jwt = require("jsonwebtoken");
 const { db } = require("../database/db");
 const sql = require("../database/sql");
-const bcrypt = require("bcryptjs");
-const multer = require("multer");
 
 router.post(
   "/create",
