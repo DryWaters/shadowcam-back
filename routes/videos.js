@@ -20,19 +20,26 @@ router.post(
           work_id: req.body.work_id
         };
 
-        insertVideoInfo(videoInfo, res).then(result => {
-          if (result[0]) {
-            // if able to insert into video table
-            // name the file the video_id
-            cb(null, `${result[0].video_id}.webm`);
-          } else {
-            // else error, respond back
+        insertVideoInfo(videoInfo, res)
+          .then(result => {
+            if (result[0]) {
+              // if able to insert into video table
+              // name the file the video_id
+              cb(null, `${result[0].video_id}.webm`);
+            } else {
+              // else error, respond back
+              res.json({
+                status: "error",
+                message: "error inserting video info"
+              });
+            }
+          })
+          .catch(err => {
             res.json({
               status: "error",
-              message: "error inserting video info"
+              message: `error inserting video info with error: ${err}`
             });
-          }
-        });
+          });
       }
     });
 
