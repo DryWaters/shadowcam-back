@@ -19,19 +19,19 @@ router.post(
 
     for (let field of requiredFields) {
       if (!workout.hasOwnProperty(field)) {
-        return res
-          .json({
-            status: "error",
-            message: "error: missing user data"
-          })
-          .end();
+        return res.json({
+          status: "error",
+          message: `error: missing user data: ${field}`
+        });
       }
     }
 
     db.any(sql.workouts.createWorkout, workout).then(result => {
       if (result[0]) {
-        // returns work_id
-        res.json(result[0]);
+        res.json({
+          status: "ok",
+          message: `work id: ${result[0].work_id}`
+        });
       } else {
         res.json({
           status: "error",
