@@ -2,15 +2,14 @@
 CREATE TABLE videos (
   video_id SERIAL PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id) NOT NULL,
-  file_size INTEGER NOT NULL,
-  video_length_in_sec INTEGER NOT NULL,
+  file_size INTEGER NOT NULL
 );
 
 -- [x] Create workouts table
 CREATE TABLE workouts (
   work_id SERIAL PRIMARY KEY,
   email VARCHAR (50) REFERENCES users(email),
-  recording_date DATE NOT NULL,
+  recording_date TIMESTAMP NOT NULL,
   workout_length INTEGER NOT NULL,
   num_of_intervals INTEGER NOT NULL,
   interval_length INTEGER NOT NULL
@@ -50,7 +49,7 @@ FROM
 WHERE
     email = $[email];
 
--- [] Get hashed password
+-- [x] Get hashed password
 SELECT
     pswd_hash
 FROM
