@@ -6,20 +6,19 @@ const sql = require("../database/sql");
 const multer = require("multer");
 
 router.post(
-  "/upload",
+  "/upload", 
   passport.authenticate("jwt", { session: false }),
-   (req, res) => {
+  (req, res) => {
 
-    // save filename in outerscope so can return later in JSON
-    // response
+    // Save filename in outerscope so can return later in JSON response.
     let filename;
 
     const storage = multer.diskStorage({
       destination: "./public/videos/",
       filename: function(req, file, cb) {
-        // Get other file info fields from body
-        // the text keys need to be appended to the request
-        // before the file itself
+        // Get other file info fields from body.
+        // The text keys need to be appended to the request before the file 
+        // itself.
         const videoInfo = {
           file_size: req.body.file_size,
           work_id: req.body.work_id
@@ -29,11 +28,12 @@ router.post(
           .then(result => {
             if (result[0]) {
               filename = `${result[0].video_id}.webm`
-              // if able to insert into video table
-              // name the file the video_id
+              // If able to insert into video table, name the file the after 
+              // video_id.
               cb(null, filename);
+              // Do you actually need this else clause if you are catching the 
+              // error anyways?
             } else {
-              // else error, respond back
               res.json({
                 status: "error",
                 message: "error inserting video info"
@@ -49,11 +49,11 @@ router.post(
       }
     });
 
-    // Init upload
+    // Init upload function.
+    // Set fieldname='video' and enctype='multipart/form-data' in the form.
     const upload = multer({
       storage: storage
     }).single("video");
-    // Set fieldname='video' and enctype='multipart/form-data' in the form
 
     upload(req, res, err => {
       if (err) {
@@ -62,62 +62,12 @@ router.post(
           message: `error uploading file with error: ${err}`
         });
       } else {
-        // Get file information from req.file and username from token, and
-        // store it in database - in progress
-
         res.json({
           status: "ok",
           message: `Video upload successful: ${filename}`
         });
       }
     });
-
-    // let video_id;
-
-    // // get the id of the newest video on email from the token
-    // db.any(sql.videos.getLatestVideoID)
-    // .then(result => {
-    //     if(result[0]){
-    //         // returns video_id
-    //         video_id = result[0].video_id
-
-    //         const storage = multer.diskStorage({
-    //           destination: './public/videos/',
-    //           filename: function(req, file, cb){
-    //             //   set the video name to be vid_id
-    //             cb(null, JSON.stringify(video_id) + '.webm');
-    //           }
-    //         });
-
-    //         // Init upload
-    //         const upload = multer({
-    //           storage: storage
-    //         }).single('myVideo');
-    //         // Set fieldname='myVideo' and enctype='multipart/form-data' in the form
-
-    //         upload(req, res, (err) => {
-    //             if(err){
-    //                 res.json({
-    //                     status: "error",
-    //                     message: err.toString()
-    //                 })
-    //             } else {
-    //                 // Get file information from req.file and username from token, and
-    //                 // store it in database - in progress
-    //                 console.log(req.file);
-    //                 res.json({
-    //                     status: "ok",
-    //                     message: "Video upload successful"
-    //                 })
-    //             }
-    //         })
-    //     } else {
-    //         res.json({
-    //             status: "error",
-    //             message: "Insertion failed"
-    //         })
-    //     }
-    // })
   }
 );
 
@@ -138,4 +88,10 @@ const insertVideoInfo = (videoInfo, res) => {
   return db.any(sql.videos.addVideo, videoInfo);
 };
 
-router.get("/getVideos", (req, res) => {});
+// Get video by email and work_id
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+  }
+)
