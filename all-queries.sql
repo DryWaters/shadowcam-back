@@ -2,7 +2,8 @@
 CREATE TABLE videos (
   video_id SERIAL PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id) NOT NULL,
-  file_size INTEGER NOT NULL
+  file_size INTEGER NOT NULL,
+  thumbnail BYTEA
 );
 
 -- [x] Create workouts table
@@ -56,12 +57,6 @@ FROM
     users
 WHERE
     email = $[email];
-
--- [] Get all workouts on user
-SELECT
-    *
-FROM
-    workouts JOIN users ON (workouts.email = users.email);
 
 -- [] Get single workout based on WorkID
 SELECT
@@ -121,8 +116,21 @@ SELECT stat_id
 FROM stats
 WHERE work_id = $[work_id]
 
--- [] Get latest workout id by username
+-- [x] Get workouts by email in descending order
 SELECT work_id
 FROM workouts
 WHERE email = $[email]
 ORDER BY work_id DESC
+
+-- [] Get videos and stats by work_id
+SELECT  video_id, 
+        jab, 
+        power_rear, 
+        left_hook, 
+        right_hook, 
+        left_uppercut, 
+        right_uppercut,
+        left_body_hook,
+        right_body_hook
+FROM    videos JOIN stats ON videos.work_id = stats.work_id
+WHERE   video_id.work_id = $[work_id]

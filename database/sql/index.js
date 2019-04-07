@@ -32,7 +32,8 @@ module.exports = {
     dropTable: sql("videos/dropTable.sql"),
     createTable: sql("videos/createTable.sql"),
     addVideo: sql("videos/addVideo.sql"),
-    getLatestVideoID: sql("videos/getLatestVideoID.sql")
+    getLatestVideoID: sql("videos/getLatestVideoID.sql"),
+    getVideosByWorkID: sql("videos/getVideosByWorkID.sql")
   },
   workouts: {
     dropTable: sql("workouts/dropTable.sql"),

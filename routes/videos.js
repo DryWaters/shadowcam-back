@@ -88,10 +88,28 @@ const insertVideoInfo = (videoInfo, res) => {
   return db.any(sql.videos.addVideo, videoInfo);
 };
 
-// Get video by email and work_id
+// Get video by work_id
 router.get(
-  "/",
+  "/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+
+    db.any(sql.videos.getVideosByWorkID, { work_id: req.params.id })
+    .then(result => {
+      if(result[0]){
+        res.json(result);
+      } else {
+        res.json({
+          status: "error",
+          message: "missing workout videos"
+        })
+      }
+    })
+    .catch(err => {
+      res.json({
+        status: "error",
+        message: `get videos by work id error: ${err}`
+      })
+    })
   }
 )

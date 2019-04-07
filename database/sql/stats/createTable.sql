@@ -1,5 +1,5 @@
 CREATE TABLE stats (
-  stat_id INTEGER PRIMARY KEY,
+  stat_id SERIAL PRIMARY KEY,
   work_id INTEGER REFERENCES workouts(work_id),
   jab INTEGER NOT NULL,
   power_rear INTEGER NOT NULL,
