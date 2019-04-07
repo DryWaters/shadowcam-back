@@ -26,21 +26,28 @@ router.post(
       }
     }
 
-    db.any(sql.workouts.createWorkout, workout).then(result => {
-      if (result[0]) {
-        res.json({
-          status: "ok",
-          message: {
-            work_id: result[0].work_id
-          }
-        });
-      } else {
+    db.any(sql.workouts.createWorkout, workout)
+      .then(result => {
+        if (result[0]) {
+          res.json({
+            status: "ok",
+            message: {
+              work_id: result[0].work_id
+            }
+          });
+        } else {
+          res.json({
+            status: "error",
+            message: "Insertion failed"
+          });
+        }
+      })
+      .catch(err => {
         res.json({
           status: "error",
-          message: "Insertion failed"
+          message: `Insertion failed with error ${err}`
         });
-      }
-    });
+      });
   }
 );
 
@@ -49,8 +56,8 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    db.any(sql.workouts.getWorkoutsByEmail, { email: req.user.email }).then(
-      results => {
+    db.any(sql.workouts.getWorkoutsByEmail, { email: req.user.email })
+      .then(results => {
         if (results.length > 0) {
           res.json({
             status: "ok",
@@ -62,7 +69,12 @@ router.get(
             message: "User does not have any recorded workouts"
           });
         }
-      }
-    );
+      })
+      .catch(err => {
+        res.json({
+          status: "error",
+          message: `Insertion failed with error ${err}`
+        });
+      });
   }
 );
