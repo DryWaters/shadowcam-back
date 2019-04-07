@@ -49,7 +49,7 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    db.any(sql.workouts.getLatestWorkout, { email: req.user.email })
+    db.any(sql.workouts.getWorkoutsByEmail, { email: req.user.email })
     .then(result => {
       if(result.length > 0){
         res.json(result)
