@@ -49,16 +49,20 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    db.any(sql.workouts.getWorkoutsByEmail, { email: req.user.email })
-    .then(result => {
-      if(result.length > 0){
-        res.json(result)
-      } else {
-        res.json({
-          message: "User have not recorded any workouts"
-        })
+    db.any(sql.workouts.getWorkoutsByEmail, { email: req.user.email }).then(
+      results => {
+        if (results.length > 0) {
+          res.json({
+            status: "ok",
+            workouts: results
+          });
+        } else {
+          res.json({
+            status: "ok",
+            message: "User does not have any recorded workouts"
+          });
+        }
       }
-    })
+    );
   }
-)
-    
+);
