@@ -21,7 +21,8 @@ router.post(
         // itself.
         const videoInfo = {
           file_size: req.body.file_size,
-          work_id: req.body.work_id
+          work_id: req.body.work_id,
+          screenshot: req.body.screenshot
         };
 
         insertVideoInfo(videoInfo, res)
@@ -72,9 +73,7 @@ router.post(
 );
 
 const insertVideoInfo = (videoInfo, res) => {
-  const requiredFields = new Set(["work_id", "file_size"]);
-
-  console.log(videoInfo);
+  const requiredFields = new Set(["work_id", "file_size", "screenshot"]);
 
   for (let field of requiredFields) {
     if (!videoInfo.hasOwnProperty(field)) {
