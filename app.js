@@ -11,7 +11,7 @@ const { pgp } = require('./database/db');
 const app = express();
 const users = require("./routes/users");
 const videos = require("./routes/videos")
-const workouts = require("./routes/workout")
+const workouts = require("./routes/workouts")
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));

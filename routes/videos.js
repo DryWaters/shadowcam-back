@@ -6,10 +6,9 @@ const sql = require("../database/sql");
 const multer = require("multer");
 
 router.post(
-  "/upload", 
+  "/upload",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-
     // Save filename in outerscope so can return later in JSON response.
     let filename;
 
@@ -17,34 +16,24 @@ router.post(
       destination: "./public/videos/",
       filename: function(req, file, cb) {
         // Get other file info fields from body.
-        // The text keys need to be appended to the request before the file 
+        // The text keys need to be appended to the request before the file
         // itself.
-        const videoInfo = {
-          file_size: req.body.file_size,
-          work_id: req.body.work_id,
-          screenshot: req.body.screenshot
-        };
 
-        insertVideoInfo(videoInfo, res)
+        console.log("here?");
+        db.any(sql.videos.addVideo, req.body)
           .then(result => {
             if (result[0]) {
-              filename = `${result[0].video_id}.webm`
-              // If able to insert into video table, name the file the after 
+              filename = `${result[0].video_id}.webm`;
+              // If able to insert into video table, name the file the after
               // video_id.
               cb(null, filename);
-              // Do you actually need this else clause if you are catching the 
-              // error anyways?
-            } else {
-              res.json({
-                status: "error",
-                message: "error inserting video info"
-              });
             }
           })
+          // will catch error if missing any data on the insertion
           .catch(err => {
             res.json({
               status: "error",
-              message: `error inserting video info with error: ${err}`
+              message: `missing user data with error ${err}`
             });
           });
       }
@@ -53,10 +42,26 @@ router.post(
     // Init upload function.
     // Set fieldname='video' and enctype='multipart/form-data' in the form.
     const upload = multer({
-      storage: storage
+      storage
     }).single("video");
 
     upload(req, res, err => {
+      // need to catch if missing fields here also because
+      // if user does not upload any files
+      // it will never enter the filename: function above
+      const videoInfo = req.body;
+
+      const requiredFields = new Set(["work_id", "file_size", "screenshot"]);
+
+      for (let field of requiredFields) {
+        if (!(field in videoInfo)) {
+          return res.json({
+            status: "error",
+            message: `error: missing user data: ${field}`
+          });
+        }
+      }
+
       if (err) {
         res.json({
           status: "error",
@@ -72,43 +77,27 @@ router.post(
   }
 );
 
-const insertVideoInfo = (videoInfo, res) => {
-  const requiredFields = new Set(["work_id", "file_size", "screenshot"]);
-
-  for (let field of requiredFields) {
-    if (!videoInfo.hasOwnProperty(field)) {
-      return res.json({
-        status: "error",
-        message: "error: missing user data"
-      });
-    }
-  }
-
-  return db.any(sql.videos.addVideo, videoInfo);
-};
-
 // Get video by work_id
 router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-
     db.any(sql.videos.getVideosByWorkID, { work_id: req.params.id })
-    .then(result => {
-      if(result[0]){
-        res.json(result);
-      } else {
+      .then(result => {
+        if (result[0]) {
+          res.json(result);
+        } else {
+          res.json({
+            status: "error",
+            message: "missing workout videos"
+          });
+        }
+      })
+      .catch(err => {
         res.json({
           status: "error",
-          message: "missing workout videos"
-        })
-      }
-    })
-    .catch(err => {
-      res.json({
-        status: "error",
-        message: `get videos by work id error: ${err}`
-      })
-    })
+          message: `get videos by work id error: ${err}`
+        });
+      });
   }
-)
+);

@@ -26,13 +26,12 @@ module.exports = {
     createUser: sql("users/createUser.sql"),
     findUserByEmail: sql("users/findUserByEmail.sql"),
     getUserProfile: sql("users/getUserProfile.sql"),
-    updateUserByEmail: sql("users/updateUserByEmail.sql"),
+    updateUserByEmail: sql("users/updateUserByEmail.sql")
   },
   videos: {
     dropTable: sql("videos/dropTable.sql"),
     createTable: sql("videos/createTable.sql"),
     addVideo: sql("videos/addVideo.sql"),
-    getLatestVideoID: sql("videos/getLatestVideoID.sql"),
     getVideosByWorkID: sql("videos/getVideosByWorkID.sql")
   },
   workouts: {
@@ -45,6 +44,7 @@ module.exports = {
   stats: {
     dropTable: sql("stats/dropTable.sql"),
     createTable: sql("stats/createTable.sql"),
-    getStatsByWorkID: sql("stats/getStatsByWorkID.sql")
+    getStatsByWorkID: sql("stats/getStatsByWorkID.sql"),
+    createStats: sql("stats/createStats.sql")
   }
 };
