@@ -96,9 +96,9 @@ router.get(
         res.json({
           status: "ok",
           message: {
-            workout: result[0],
+            workout: result[0][0],
             videos: result[1],
-            stats: result[2]
+            stats: result[2][0]
           }
         })
       } else {
