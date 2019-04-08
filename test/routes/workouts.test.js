@@ -7,7 +7,7 @@ let token;
 QUnit.module("/workouts/ Testing", {
   // get a valid token
   before: async assert => {
-    const assertAsync = assert.async();
+    let assertAsync = assert.async();
     const validUserData = {
       email: "test@test.com",
       password: "tester",
@@ -33,6 +33,67 @@ QUnit.module("/workouts/ Testing", {
       token = response.body.message.token;
     } catch (err) {
       assertAsync();
+    }
+
+    const validWorkoutData = {
+      email: "test@test.com",
+      recording_date: "2019-04-08",
+      workout_length: 18,
+      num_of_intervals: 6,
+      interval_length: 3
+    }
+
+    // insert workout
+    try{
+      assertAsync = assert.async()
+      const response = await request(app)
+        .post("/workouts/create")
+        .set("Authorization", `Bearer ${token}`)
+        .send(validWorkoutData)
+      assertAsync()
+    } catch(err) {
+      assertAsync()
+    }
+
+    // insert 2 videos for workout id 1
+    for(i = 0; i < 2; i++){
+      try{
+        assertAsync = assert.async()
+        const response = await request(app)
+          .post("/videos/upload")
+          .set("Authorization", `Bearer ${token}`)
+          .field('file_size', "100000")
+          .field('work_id', "1")
+          .field('screenshot', "SOME REALLY LONG TEXT FILE ENCODED PNG")
+          // .attach('video', __dirname + '/public/Test/test.webm')
+        assertAsync()
+      } catch(err) {
+        assertAsync()
+      }
+    }
+
+    const validStatsData = {
+      work_id: 1,
+      jab: 10,
+      power_rear: 10,
+      left_hook: 10,
+      right_hook: 10,
+      left_uppercut: 10,
+      right_uppercut: 10,
+      left_body_hook: 10,
+      right_body_hook: 10
+    }
+
+    // insert stats for workout 1
+    try{
+      assertAsync = assert.async()
+      const response = await request(app)
+        .post("/stats")
+        .set("Authorization", `Bearer ${token}`)
+        .send(validStatsData)
+      assertAsync()
+    } catch(err) {
+      assertAsync()
     }
   }
 });
@@ -127,20 +188,48 @@ QUnit.test("Should respond if missing workout data", async assert => {
   }
 });
 
-QUnit.test("Getting workout, video and stats information from work id")
+QUnit.test("Getting workout, video and stats information from work id", 
 async assert => {
   const assertAsync = assert.async();
   
+  const validReturnData = {
+    status: "ok",
+    message: {
+      workout: 
+      {
+        work_id: 1,
+        recording_date: "2019-04-08T07:00:00.000Z",
+        workout_length: 18,
+        num_of_intervals: 6,
+        interval_length: 3
+      },
+      videos: [],
+      stats: 
+      {
+        stat_id: 1,
+        jab: 10,
+        power_rear: 10,
+        left_hook: 10,
+        right_hook: 10,
+        left_uppercut: 10,
+        right_uppercut: 10,
+        left_body_hook: 10,
+        right_body_hook: 10
+      }
+    }
+  }
+
   try{
     const response = await request(app)
       .get("/workouts/1")
       .set("Authorization", `Bearer ${token}`)
       .expect("Content-Type", /json/)
+      
     assertAsync()
-    assert.equal(response.body.status, "ok")
+    assert.deepEqual(validReturnData, response.body)
   }
   catch(err){
     assertAsync()
     assert.ok(false, `FAIL GET /workouts/:id, with error ${err}`)
   }
-}
+})
