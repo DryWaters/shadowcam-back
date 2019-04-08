@@ -126,3 +126,21 @@ QUnit.test("Should respond if missing workout data", async assert => {
     assert.ok(false, `FAIL POST /workouts, with error ${err}`);
   }
 });
+
+QUnit.test("Getting workout, video and stats information from work id")
+async assert => {
+  const assertAsync = assert.async();
+  
+  try{
+    const response = await request(app)
+      .get("/workouts/1")
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+    assertAsync()
+    assert.equal(response.body.status, "ok")
+  }
+  catch(err){
+    assertAsync()
+    assert.ok(false, `FAIL GET /workouts/:id, with error ${err}`)
+  }
+}
