@@ -116,13 +116,10 @@ QUnit.test(
         .expect("Content-Type", /json/);
       assertAsync();
       assert.equal(response.body.status, "error");
-      // assert.equal(response.body.message, "error: missing user data: workout_length")
+      assert.equal(response.body.message, "error: missing user data: workout_length")
     } catch (err) {
       assertAsync();
       assert.ok(false, `FAIL POST /workouts, with error ${err}`);
     }
   }
 );
-
-status: "error",
-message: `error: missing user data: ${field}`
