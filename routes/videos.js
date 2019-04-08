@@ -19,7 +19,6 @@ router.post(
         // The text keys need to be appended to the request before the file
         // itself.
 
-        console.log("here?");
         db.any(sql.videos.addVideo, req.body)
           .then(result => {
             if (result[0]) {
@@ -49,7 +48,7 @@ router.post(
       // need to catch if missing fields here also because
       // if user does not upload any files
       // it will never enter the filename: function above
-      const videoInfo = req.body;
+      const videoInfo = Object.assign({}, req.body);
 
       const requiredFields = new Set(["work_id", "file_size", "screenshot"]);
 

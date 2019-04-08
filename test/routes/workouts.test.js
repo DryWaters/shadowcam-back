@@ -38,7 +38,7 @@ QUnit.module("/workouts/ Testing", {
 });
 
 QUnit.test(
-  "Should allow user to register with valid user data",
+  "Should allow user to retrieve workouts with valid token",
   async assert => {
     const assertAsync = assert.async();
     try {
