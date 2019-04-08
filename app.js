@@ -12,6 +12,7 @@ const app = express();
 const users = require("./routes/users");
 const videos = require("./routes/videos")
 const workouts = require("./routes/workouts")
+const stats = require("./routes/stats")
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
@@ -24,6 +25,7 @@ require("./passport")(passport);
 app.use("/users", users);
 app.use('/videos', videos)
 app.use('/workouts', workouts)
+app.use('/stats/', stats)
 
 if (process.env.REBUILD_DATA && process.env.REBUILD_DATA === "TRUE") {
   utils.rebuildData().then(() => {
