@@ -38,7 +38,7 @@ router.post(
           res.json({
             status: "ok",
             message: {
-              stat_id: result[0].stat_id
+              stat_id: result[0].work_id
             }
           });
         } else {
@@ -51,7 +51,7 @@ router.post(
       .catch(err => {
         res.json({
           status: "error",
-          message: `Insertion failed with error ${err}`
+          message: `Insertion failed with ${err}`
         });
       });
   }
