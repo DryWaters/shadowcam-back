@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
-require("./passport")(passport);
+require("./passport/passport")(passport);
 
 // Put which routes you want to use here.
 app.use("/users", users);
