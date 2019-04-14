@@ -19,7 +19,8 @@ const localUpload = multer({
             cb(null, filename);
           }
         })
-        // will catch error if missing any data on the insertion
+        // will catch error if missing any data on the insertion:
+        // res is not defined!!
         .catch(err => {
           res.json({
             status: "error",

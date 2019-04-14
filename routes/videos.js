@@ -33,10 +33,7 @@ router.post(
 
       if (err) {
         console.log(err);
-        db.any(sql.videos.deleteVideo, {
-          work_id: videoInfo.work_id,
-          file_size: videoInfo.file_size
-        })
+        db.any(sql.videos.deleteVideo, { work_id: videoInfo.work_id })
           .then(result => {
             return res.json({
               status: "error",
