@@ -29,13 +29,28 @@ DB_PORT=5432
 
 LOCAL=TRUE
 REBUILD_DATA=FALSE
-NODE_ENV=development
-KEY=password
+KEY=foryourpasswordhashing
+SECRET_ACCESS_KEY=yourS3accesskey
+ACCESS_KEY_ID=yourS3accesskeyID
 
 ```
+4. Edit the multer/s3Upload.js file and enter your region and
+bucket name if you are not using the application locally.
+``` javascript
+  aws.config.update({
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  region: "us-west-1"
+});
 
-4. Install NPM Packages using ``` npm install ```
-5. Run with ``` npm start ```
+...
+ storage: multerS3({
+    s3: s3,
+    bucket: "shadowcam-back",
+...
+```
+5. Install NPM Packages using ``` npm install ```
+6. Run with ``` npm start ```
 
 ShadowCam table definitions will be created upon start up with the flag
 REBUILD_DATA=TRUE.  The information only needs to be rebuilt once, and 
